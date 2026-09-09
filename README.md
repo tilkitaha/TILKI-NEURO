@@ -5,9 +5,9 @@
 A reproducible research prototype for EEG command decoding, uncertainty rejection,
 and deliberate phrase selection. Created for the TILKI NEURO project.
 
-**Status: v0.1.0 software research foundation.** The included results use engineered
-synthetic signals. This is not an implant, a fabricated chip, a thought reader,
-or a validated assistive/medical device. No human performance or clinical benefit
+**Status: v0.1.0 software research foundation.** Included results cover engineered synthetic signals and a small six-subject
+PhysioNet EEG baseline, which performed approximately at chance. This is not an implant, a fabricated chip, a thought reader,
+or a validated assistive/medical device. No useful assistive performance or clinical benefit
 has been demonstrated by this repository.
 
 ## Run in five minutes
@@ -67,6 +67,33 @@ contain easy class structure. **These numbers do not estimate performance on rea
 The clean benchmark shows no improvement from rejection; zero observed errors in
 72 idle windows is not evidence of a zero error rate. Timing in the JSON is host
 batch timing, excluding signal acquisition; chip energy has not been measured.
+
+## Initial real EEG result — not useful communication yet
+
+[Full six-subject report](examples/physionet-six-subjects/report.json): 540 windows
+from subjects 1–6, using runs 4/8/12. Train: 3/4/6; validation: 5; test: 1/2.
+Only this predefined split was evaluated; no tuning followed the test result.
+
+| Held-out measure (180 windows) | Baseline | With rejection |
+|---|---:|---:|
+| Baseline balanced accuracy | 33.34% (approximately chance) | — |
+| Accepted-window coverage | 100% | 36.67% |
+| Accepted-window accuracy | 46.67% | 50.00% |
+| Correct active-command recall | 6.67% | 3.33% |
+| Idle false activations | 12 / 90 | 2 / 90 |
+| Wrong active outputs | 17 | 4 |
+
+**This is a negative baseline result, not a successful communication system.**
+Lower false activation came with rejection of 114/180 windows and only 3/90 active
+commands decoded correctly. The quality heuristic also removed 119/270 training
+windows. The pipeline needs stronger signal processing, artifact analysis and
+baselines before any efficacy claim. Raw EEG is not included; source checksums
+are provided in the example directory. These recordings are from volunteers in
+a public dataset, not a patient study conducted by TILKI.
+
+Reproduce the exact six-subject run with the commands below, replacing the subject
+list with `1 2 3 4 5 6`. The 12-subject example is a next experiment, not a result
+reported in this release.
 
 ## Real EEG workflow
 

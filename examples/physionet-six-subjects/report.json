@@ -1,0 +1,91 @@
+{
+  "version": "0.1.0",
+  "source": "PhysioNet-EEGMMIDB-1.0.0-runs-4-8-12-C3-Cz-C4",
+  "seed": 42,
+  "interpretation": "Offline window classification; not clinical or continuous-use validation.",
+  "protocol": "Subject-disjoint, non-overlapping windows; threshold selected only on validation subjects.",
+  "groups": {
+    "train": [
+      3,
+      4,
+      6
+    ],
+    "validation": [
+      5
+    ],
+    "test": [
+      1,
+      2
+    ]
+  },
+  "window_seconds": 2.0,
+  "training_windows_excluded_for_quality": 119,
+  "validation_idle_false_activation_target": 0.05,
+  "threshold": 0.45833333333333337,
+  "validation": {
+    "windows": 90,
+    "coverage": 0.26666666666666666,
+    "accepted_accuracy": 0.4583333333333333,
+    "correct_command_recall": 0.1111111111111111,
+    "wrong_commands": 6,
+    "idle_false_activation_fraction": 0.044444444444444446,
+    "idle_false_activations_per_minute": 1.3333333333333333,
+    "abstained_windows": 66
+  },
+  "baseline": {
+    "windows": 180,
+    "coverage": 1.0,
+    "accepted_accuracy": 0.4666666666666667,
+    "correct_command_recall": 0.06666666666666667,
+    "wrong_commands": 17,
+    "idle_false_activation_fraction": 0.13333333333333333,
+    "idle_false_activations_per_minute": 4.0,
+    "abstained_windows": 0
+  },
+  "baseline_balanced_accuracy": 0.3333552920509442,
+  "baseline_confusion_matrix_labels_0_1_2": [
+    [
+      78,
+      8,
+      4
+    ],
+    [
+      42,
+      3,
+      1
+    ],
+    [
+      37,
+      4,
+      3
+    ]
+  ],
+  "gated": {
+    "windows": 180,
+    "coverage": 0.36666666666666664,
+    "accepted_accuracy": 0.5,
+    "correct_command_recall": 0.03333333333333333,
+    "wrong_commands": 4,
+    "idle_false_activation_fraction": 0.022222222222222223,
+    "idle_false_activations_per_minute": 0.6666666666666666,
+    "abstained_windows": 114
+  },
+  "flat_channel_stress": {
+    "windows": 180,
+    "coverage": 0.0,
+    "accepted_accuracy": null,
+    "correct_command_recall": 0.0,
+    "wrong_commands": 0,
+    "idle_false_activation_fraction": 0.0,
+    "idle_false_activations_per_minute": 0.0,
+    "abstained_windows": 180
+  },
+  "batch_wall_ms_per_window": 0.04628762222233086,
+  "timing_note": "Host batch timing, not streaming latency or chip energy; excludes 2-second acquisition where applicable.",
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sklearn": "1.8.0"
+  }
+}

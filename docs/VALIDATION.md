@@ -13,7 +13,12 @@ Executed in the authoring environment on 2026-09-09:
 - Tk imports successfully; visual desktop execution was not verified because this
   environment has no graphical display. Communication logic is tested headlessly.
 
-Not established: human EEG performance, clinical utility, superiority to published
+- Imported 18 real EDF files from six PhysioNet subjects into 540 windows.
+- Real EEG evaluation completed: baseline balanced accuracy 33.34%; rejection
+  coverage 36.67% and active-command recall 3.33%. This fails useful decoding.
+- GitHub Research checks completed successfully on the initial code commit.
+
+Not established: useful assistive performance, clinical utility, superiority to published
 methods, adaptive drift recovery, embedded power consumption, fabricated hardware.
 The desktop interface depends on Tk/display availability; state-machine tests can
 run without a GUI. GitHub Actions status must be checked on GitHub separately.
