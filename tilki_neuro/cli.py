@@ -20,8 +20,16 @@ def main():
     p.add_argument('--subjects', type=int, nargs='+', required=True)
     p.add_argument('--download', action='store_true', help='Explicitly allow MNE to download EDFs')
     p.add_argument('--output', type=Path, default=Path('data/physionet.npz'))
+    p = sub.add_parser('study', help='Run the frozen spatial EEG comparison')
+    p.add_argument('--root', type=Path, required=True)
+    p.add_argument('--protocol', type=Path, default=Path('protocols/v0.2.json'))
+    p.add_argument('--output', type=Path, default=Path('outputs/study-v0.2'))
     sub.add_parser('demo')
     args = parser.parse_args()
+    if args.command == 'study':
+        from .study import run
+        run(args.root, args.protocol, args.output)
+        return
     if args.command == 'demo':
         from .demo import main as demo
         demo()

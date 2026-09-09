@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tilki-neuro"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible EEG command decoding and rejection research prototype"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2", "scikit-learn>=1.4,<2"]
 
 [project.optional-dependencies]
 eeg = ["mne>=1.6,<2"]
+research = ["mne>=1.6,<2", "pyriemann>=0.9,<0.14", "matplotlib>=3.8,<4"]
 test = ["pytest>=8,<10"]
 
 [project.scripts]
