@@ -1,152 +1,140 @@
 # TILKI NEURO
 
-**Reliable neural commands, measured before claimed.**
+**A reproducible laboratory for reliable EEG command decoding.**
 
-A reproducible research prototype for EEG command decoding, uncertainty rejection,
-and deliberate phrase selection. Created for the TILKI NEURO project.
+v0.2 expands the original prototype into a run-aware EEG research workbench:
+spatial filtering, Riemannian geometry, validation-only model selection, explicit
+abstention, subject uncertainty intervals, and an evidence console.
 
-**Status: v0.1.0 software research foundation.** Included results cover engineered synthetic signals and a small six-subject
-PhysioNet EEG baseline, which performed approximately at chance. This is not an implant, a fabricated chip, a thought reader,
-or a validated assistive/medical device. No useful assistive performance or clinical benefit
-has been demonstrated by this repository.
+**Status:** experimental offline software. It is not an implant, fabricated
+neurochip, medical device, or demonstrated communication aid. The algorithms are
+established methods; this release does not claim a new scientific breakthrough.
 
-## Run in five minutes
+![Measured v0.2 results](examples/study-v0.2/evidence.svg)
+
+## What actually changed
+
+| v0.1 | v0.2 |
+|---|---|
+| Three EEG channels | 21 motor-area channels with common-average reference |
+| One spectral classifier | Bandpower, CSP/LDA, filter-bank CSP, Riemannian tangent-space classifiers |
+| One cross-subject split | Transfer to six new subjects and personal calibration with a held-out run |
+| Threshold can reject almost everything | Command gate must meet error **and utility** criteria on validation |
+| Synthetic demonstration | Real EEG evidence console plus the separate synthetic demonstration |
+| Single headline accuracy | Every model, subject, confusion matrix, Brier score, and abstention cost |
+
+## Actual held-out results
+
+36 public EDF recordings from 12 volunteers produced 1,080 non-overlapping,
+three-second windows. Development subjects: 1–6 (already used in v0.1).
+New evaluation subjects: 7–12. All models were selected using validation data.
+
+| Task | No personal calibration | Personal calibration | Chance |
+|---|---:|---:|---:|
+| Idle / left / right | 37.4% [34.4, 40.6] | 48.5% [41.2, 56.1] | 33.3% |
+| Left vs right, **idle excluded** | 54.3% [46.2, 62.8] | 64.7% [51.8, 80.5] | 50% |
+
+Values are **mean subject balanced accuracy**; brackets are 95% subject-bootstrap
+percentile intervals from only six people. Transfer tests runs 4/8/12; personal
+calibration trains on run 4, selects on run 8, and tests run 12. These columns are
+not a matched causal estimate of the benefit of calibration. Same-day runs are
+not independent long-term sessions. Binary accuracy does not establish reliable
+idle detection, word decoding, or communication.
+
+**Reliability is still unsolved.** The gate disabled all transfer commands and
+four of six personal systems because validation could not meet both requirements:
+idle false-activation fraction <=5% and correct active-command recall >=20%.
+For subject 7, the enabled gate's test idle false-activation fraction was 6.7%,
+exceeding the validation target; subject 12 had zero observed idle errors in only
+15 idle test windows. A validation pass is not a test-time guarantee.
+
+[Full study](examples/study-v0.2/study.json) ·
+[Technical report](docs/STUDY_V0.2.md) ·
+[Protocol frozen before evaluation](protocols/v0.2.json) ·
+[Original v0.1 work](docs/V0.1.md)
+
+## Install and explore
 
 Python 3.10+:
 
 ```bash
+git clone https://github.com/tilkitaha/TILKI-NEURO.git
+cd TILKI-NEURO
 python -m venv .venv
-# Linux/macOS
 source .venv/bin/activate
-# Windows alternative: .venv\Scripts\activate
-python -m pip install -e '.[test]'
-python -m tilki_neuro benchmark
+# Windows: .venv\Scripts\activate
+python -m pip install -e '.[research,test]'
 python -m pytest -q
-python -m tilki_neuro demo
+python -m tilki_neuro console examples/study-v0.2/study.json
 ```
 
-The desktop demo needs Tk and a graphical desktop (some Linux Python installations
-need the OS package `python3-tk`). Benchmark and tests also run headlessly.
-
-In the demo, choose **Left imagery** to move and **Right imagery** to select a
-phrase. Choose **Idle** between commands. A second selection confirms the phrase.
-**Disconnected channel** injects a flat channel into the actual decoder input and
-cancels pending selection. Cancel and Undo are always available. Nothing is sent.
-Buttons choose synthetic input examples, not the decoder's output; model scores
-and the signal quality check determine the resulting command.
-
-## What exists
-
-- Three-class spectral baseline: idle, left imagery, right imagery.
-- Welch log-bandpower features and logistic regression; scaling fitted on training only.
-- Subject-disjoint train/validation/test partitions with explicit group manifests.
-- Confidence threshold chosen on validation subjects under a specified idle false-activation target.
-- Flat-channel, excessive-amplitude, and non-finite signal rejection.
-- Phrase board with idle rearming, two-step confirmation, cancel, and undo.
-- Local EDF importer for PhysioNet EEGMMIDB motor imagery runs 4, 8, 12.
-- JSON metrics, synthetic replay, deterministic tests, and GitHub Actions.
-
-Scores are **not calibrated probabilities of correctness**. Quality thresholds are
-engineering heuristics. Rejection can reduce useful communication as well as mistakes.
-
-## Included measured result
-
-See [the complete report](examples/synthetic/report.json).
-Default seed 42: 12 synthetic subjects, 864 two-second windows, 216 held-out test windows.
-
-| Measure | Baseline | With rejection |
-|---|---:|---:|
-| Test balanced accuracy of baseline | 93.98% | Not computed with abstentions |
-| Accepted-window accuracy | 93.98% | 93.98% |
-| Accepted-window coverage | 100% | 100% |
-| Correct active-command recall | 90.97% | 90.97% |
-| Idle false activations | 0 / 72 | 0 / 72 |
-
-All 216 flat-channel stress windows were rejected. These toy signals intentionally
-contain easy class structure. **These numbers do not estimate performance on real EEG.**
-The clean benchmark shows no improvement from rejection; zero observed errors in
-72 idle windows is not evidence of a zero error rate. Timing in the JSON is host
-batch timing, excluding signal acquisition; chip energy has not been measured.
-
-## Initial real EEG result — not useful communication yet
-
-[Full six-subject report](examples/physionet-six-subjects/report.json): 540 windows
-from subjects 1–6, using runs 4/8/12. Train: 3/4/6; validation: 5; test: 1/2.
-Only this predefined split was evaluated; no tuning followed the test result.
-
-| Held-out measure (180 windows) | Baseline | With rejection |
-|---|---:|---:|
-| Baseline balanced accuracy | 33.34% (approximately chance) | — |
-| Accepted-window coverage | 100% | 36.67% |
-| Accepted-window accuracy | 46.67% | 50.00% |
-| Correct active-command recall | 6.67% | 3.33% |
-| Idle false activations | 12 / 90 | 2 / 90 |
-| Wrong active outputs | 17 | 4 |
-
-**This is a negative baseline result, not a successful communication system.**
-Lower false activation came with rejection of 114/180 windows and only 3/90 active
-commands decoded correctly. The quality heuristic also removed 119/270 training
-windows. The pipeline needs stronger signal processing, artifact analysis and
-baselines before any efficacy claim. Raw EEG is not included; source checksums
-are provided in the example directory. These recordings are from volunteers in
-a public dataset, not a patient study conducted by TILKI.
-
-Reproduce the exact six-subject run with the commands below, replacing the subject
-list with `1 2 3 4 5 6`. The 12-subject example is a next experiment, not a result
-reported in this release.
-
-## Real EEG workflow
+The desktop console shows measured results, all candidate models, the protocol,
+and gate status. It needs Tk and a graphical desktop. Its chart export was rendered
+and inspected; desktop interaction was not verified in the headless authoring
+environment. To view the results without Tk, open the dashboard above.
 
 ```bash
-python -m pip install -e '.[eeg]'
-python -m tilki_neuro prepare-physionet \
-  --root data/edf --subjects 1 2 3 4 5 6 7 8 9 10 11 12 \
-  --download --output data/physionet.npz
-python -m tilki_neuro evaluate data/physionet.npz --output outputs/physionet
+# Synthetic signals; actual inference, no headset connection:
+python -m tilki_neuro demo
+# Re-run the original toy benchmark:
+python -m tilki_neuro benchmark
+# Export charts from measured results:
+python -m tilki_neuro figures examples/study-v0.2/study.json --output outputs/figures
 ```
 
-Omit `--download` to import EDFs already present anywhere below `--root`.
-Downloading requires Internet access. The importer selects C3/Cz/C4 in a fixed
-order, converts volts to microvolts, and takes one two-second window starting
-0.5 seconds after each eligible annotation. It excludes windows crossing event
-boundaries. T0 is rest, T1 left-fist imagery, T2 right-fist imagery for these runs.
-Rest cues are **not equivalent to unrestricted real-world idle behavior**.
+## Reproduce the real EEG study
 
-At least six subject IDs are required for evaluation. All runs of each subject
-remain in a single partition. This is cross-subject evaluation, not a longitudinal
-session-drift experiment. Missing/duplicate files and incompatible sample rates
-fail explicitly. Raw EEG and prepared datasets are ignored by Git. Real-data
-signal replay is not exported by the evaluation command.
+The old importer can download the required EDF files (its three-channel NPZ is
+not used by the new study):
 
-For custom datasets, see [the data contract](docs/DATA.md).
+```bash
+python -m tilki_neuro prepare-physionet --root data/edf \
+  --subjects 1 2 3 4 5 6 7 8 9 10 11 12 --download
+python -m tilki_neuro study --root data/edf \
+  --protocol protocols/v0.2.json --output outputs/my-study
+```
 
-## Research direction
+The study refuses to overwrite an existing `study.json`. Store each run separately.
+Reports contain the protocol hash, EDF hashes, package versions, timing, individual
+predictions and all results. No raw EEG is uploaded. Downloading requires network
+access; all decoding runs locally.
 
-**Question:** can a decoder preserve useful command throughput while reducing
-unintended activations and setup burden under signal changes, within a measured
-embedded compute budget?
+The published prediction audit is compressed as `predictions.json.gz`. Read it with
+`gzip.open(path, 'rt')` and `json.load`. Fresh study runs export plain JSON for ease
+of inspection. `requirements-research-tested.txt` records the tested top-level
+versions on Python 3.12; other Python versions resolve compatible dependencies
+from `pyproject.toml`.
 
-This release establishes the baseline and test harness. It **does not implement
-online adaptation** or establish a novel algorithm. Next steps are:
+## Architecture
 
-1. Run real EEG baselines and repeat subject splits; report uncertainty across subjects.
-2. Add continuous idle and repeated-session datasets with documented rights.
-3. Compare calibrated rejection, drift detection, and controlled adaptation at matched coverage.
-4. Test with an independent lab under an approved participant protocol.
-5. Measure an embedded processor; consider FPGA/ASIC work only if justified by evidence.
+- `corpus.py`: channel order, reference, run/event provenance, isolated windows.
+- `spatial.py`: four established sklearn-compatible pipelines.
+- `study.py`: partition checks, validation-only selection, fail-closed command
+  gate, subject-bootstrap intervals, artifact stress scenarios and prediction audit.
+- `console.py` / `figures.py`: stored-evidence inspection and scientific plots.
+- `communication.py`: phrase selection, idle rearming, confirmation and undo.
+- `decoder.py` / `evaluate.py`: retained v0.1 baseline for reproducibility.
 
-See [the protocol](docs/RESEARCH_PROTOCOL.md), [limitations](docs/MODEL_CARD.md),
-and [validation record](docs/VALIDATION.md).
+The spatial pipelines use **offline zero-phase filtering inside each epoch**.
+They are not causal streaming decoders. Classifier scores are not calibrated
+certainty. Noise, gain and flat-channel stress tests are controlled perturbations,
+not a validated physiological drift model. No model learns from test labels.
 
-## Sources and attribution
+## What would make this scientifically important?
 
-- [PhysioNet EEG Motor Movement/Imagery Dataset](https://physionet.org/content/eegmmidb/1.0.0/).
-  Credit the original dataset and its required citations in work using the data;
-  its own terms apply separately to recordings.
-- [MNE EEGBCI loader documentation](https://mne.tools/stable/generated/mne.datasets.eegbci.load_data.html).
-- [Stabilizing BCIs through alignment of latent dynamics (2025)](https://www.nature.com/articles/s41467-025-59652-y).
-- [Long-term unsupervised recalibration (2025)](https://www.nature.com/articles/s41551-025-01536-z).
-- [Low-power embedded EEG decoding](https://arxiv.org/abs/2004.00077).
+The next contribution must improve reliability at matched useful throughput,
+not just headline accuracy. The immediate gaps are independent-session validation,
+stronger idle data, calibrated uncertainty, and a causal embedded implementation.
+An independent neuroengineering lab should reproduce the result before any claim
+of novelty or clinical relevance. See [the research plan](docs/STUDY_V0.2.md).
 
-These works motivate the research; this repository does not reproduce their
-clinical systems or claim their findings as its own.
+## Scientific foundations
+
+- [PhysioNet EEGMMIDB](https://physionet.org/content/eegmmidb/1.0.0/): source data;
+  retain dataset terms and cite its authors when using recordings.
+- [MNE CSP example](https://mne.tools/stable/auto_examples/decoding/decoding_csp_eeg.html).
+- [pyRiemann tangent-space methods](https://pyriemann.readthedocs.io/en/latest/generated/pyriemann.tangentspace.TangentSpace.html).
+- [MOABB evaluation framework](https://moabb.neurotechx.com/docs/index.html):
+  evaluation distinctions and reproducibility guidance. This is not a MOABB benchmark run.
+
+[Model limitations](docs/MODEL_CARD.md) · [Validation](docs/VALIDATION.md)

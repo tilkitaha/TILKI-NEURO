@@ -10,3 +10,5 @@ outputs/
 *.edf
 *.npz
 .env
+
+examples/study-v0.2/evidence.png

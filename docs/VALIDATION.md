@@ -22,3 +22,15 @@ Not established: useful assistive performance, clinical utility, superiority to 
 methods, adaptive drift recovery, embedded power consumption, fabricated hardware.
 The desktop interface depends on Tk/display availability; state-machine tests can
 run without a GUI. GitHub Actions status must be checked on GitHub separately.
+
+## v0.2
+
+- 21 tests passed, including all four spatial pipelines, isolated window filtering,
+  subject-leakage rejection, fail-closed gates, and deterministic subject bootstrap.
+- Frozen protocol and source committed before the new six-subject evaluation.
+- Complete study ran successfully on 36 EDFs / 12 subjects / 1,080 windows.
+- The two tasks and both transfer/personal modes ran; all candidates disclosed.
+- Evidence dashboard rendered from JSON and visually inspected.
+- Desktop console code compiled; Tk/display interaction not verified in this
+  headless environment. An attempted display dependency installation was unavailable.
+- No meaningful end-to-end communication, clinical or hardware claim is supported.

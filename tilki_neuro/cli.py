@@ -24,8 +24,21 @@ def main():
     p.add_argument('--root', type=Path, required=True)
     p.add_argument('--protocol', type=Path, default=Path('protocols/v0.2.json'))
     p.add_argument('--output', type=Path, default=Path('outputs/study-v0.2'))
+    p = sub.add_parser('console', help='Inspect a stored study in the desktop research console')
+    p.add_argument('report', type=Path)
+    p = sub.add_parser('figures', help='Export a study evidence dashboard')
+    p.add_argument('report', type=Path)
+    p.add_argument('--output', type=Path, default=Path('outputs/figures'))
     sub.add_parser('demo')
     args = parser.parse_args()
+    if args.command == 'console':
+        from .console import main as console
+        console(args.report)
+        return
+    if args.command == 'figures':
+        from .figures import export
+        export(args.report, args.output)
+        return
     if args.command == 'study':
         from .study import run
         run(args.root, args.protocol, args.output)

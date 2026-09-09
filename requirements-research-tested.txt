@@ -1,0 +1,9 @@
+# Top-level versions used for the v0.2 study, Python 3.12.14.
+# This is an environment record, not a complete transitive lockfile.
+numpy==2.3.5
+scipy==1.17.0
+scikit-learn==1.8.0
+mne==1.12.1
+pyriemann==0.12
+matplotlib==3.10.8
+pytest==9.1.1

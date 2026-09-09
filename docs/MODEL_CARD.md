@@ -26,3 +26,15 @@ represent real-world idle. A toy result cannot justify medical use.
 Privacy: software runs locally; explicit download connects to dataset providers.
 The desktop demo stores phrases in process memory only. No cloud telemetry, LLM,
 message sending, or account is required. Do not commit identifiable neural data.
+
+## v0.2 spatial research extension
+
+The retained v0.1 model above remains reproducible. v0.2 adds 21 motor channels,
+common-average reference, CSP/LDA, filter-bank CSP, and pyRiemann tangent-space
+models. Its study protocol, quality thresholds, real-data population, results,
+and limitations are in `STUDY_V0.2.md`. No online adaptation is implemented.
+
+The research console displays stored real-data results. The original communication
+demo remains explicitly synthetic and uses its original decoder. No trained
+human-data model is silently substituted into the toy demo. Binary imagery scores
+exclude idle and cannot justify autonomous commands.
