@@ -1,0 +1,97 @@
+{
+  "version": "0.1.0",
+  "source": "synthetic-engineered-mu-v1",
+  "seed": 42,
+  "interpretation": "Offline window classification; not clinical or continuous-use validation.",
+  "protocol": "Subject-disjoint, non-overlapping windows; threshold selected only on validation subjects.",
+  "groups": {
+    "train": [
+      1,
+      2,
+      3,
+      5,
+      6,
+      8
+    ],
+    "validation": [
+      4,
+      7,
+      11
+    ],
+    "test": [
+      0,
+      9,
+      10
+    ]
+  },
+  "window_seconds": 2.0,
+  "training_windows_excluded_for_quality": 0,
+  "validation_idle_false_activation_target": 0.05,
+  "threshold": 0.475,
+  "validation": {
+    "windows": 216,
+    "coverage": 1.0,
+    "accepted_accuracy": 0.9907407407407407,
+    "correct_command_recall": 0.9861111111111112,
+    "wrong_commands": 0,
+    "idle_false_activation_fraction": 0.0,
+    "idle_false_activations_per_minute": 0.0,
+    "abstained_windows": 0
+  },
+  "baseline": {
+    "windows": 216,
+    "coverage": 1.0,
+    "accepted_accuracy": 0.9398148148148148,
+    "correct_command_recall": 0.9097222222222222,
+    "wrong_commands": 0,
+    "idle_false_activation_fraction": 0.0,
+    "idle_false_activations_per_minute": 0.0,
+    "abstained_windows": 0
+  },
+  "baseline_balanced_accuracy": 0.9398148148148148,
+  "baseline_confusion_matrix_labels_0_1_2": [
+    [
+      72,
+      0,
+      0
+    ],
+    [
+      6,
+      66,
+      0
+    ],
+    [
+      7,
+      0,
+      65
+    ]
+  ],
+  "gated": {
+    "windows": 216,
+    "coverage": 1.0,
+    "accepted_accuracy": 0.9398148148148148,
+    "correct_command_recall": 0.9097222222222222,
+    "wrong_commands": 0,
+    "idle_false_activation_fraction": 0.0,
+    "idle_false_activations_per_minute": 0.0,
+    "abstained_windows": 0
+  },
+  "flat_channel_stress": {
+    "windows": 216,
+    "coverage": 0.0,
+    "accepted_accuracy": null,
+    "correct_command_recall": 0.0,
+    "wrong_commands": 0,
+    "idle_false_activation_fraction": 0.0,
+    "idle_false_activations_per_minute": 0.0,
+    "abstained_windows": 216
+  },
+  "batch_wall_ms_per_window": 0.043257324075848716,
+  "timing_note": "Host batch timing, not streaming latency or chip energy; excludes 2-second acquisition where applicable.",
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sklearn": "1.8.0"
+  }
+}
